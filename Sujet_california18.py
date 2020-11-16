@@ -362,7 +362,7 @@ courbe_max5(temps_c5,c5_noise)
 courbe_max6(temps_c6,c6_noise)
 plt.legend()
 plt.xticks([86400*i for i in range (n)]) # On a ainsi une graduation toutes les 86400 secondes, donc tous les jours
-axes.xaxis.set_ticklabels([jourd+i for i in range(n)])  #On renomme des graduations avec le numéro de jour correspondant
+axes.xaxis.set_ticklabels([jourd+i for i in range(n)])  #On renomme des gradutations avec le numéro de jour correspondant
 axes.set_xlabel("Jours du mois d'août")
 axes.set_ylabel('Niveau sonore en dBA')
 plt.show()
@@ -561,7 +561,7 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
     L1_t=date_convertie(l1_t)
     L2_t=date_convertie(l2_t)
     D=[]
-    D_n=[]#Distance normalisée entre 0 et 1
+    #D_n=[]#Distance normalisée entre 0 et 1
     n=len(base_temps)
     for i in range(1,n):#Indice parcourant la liste des temps
         l1=[]
@@ -574,17 +574,14 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
             if base_temps[i-1]<=y<base_temps[i]:
                 z=L2_t.index(y)
                 l2.append(L2[z])
-        if len(l1)!=0 and len(l2)!=0:
+        if len(l1)==0 or len(l2)==0:
+            D.append(None)
+        else:
             d=abs(moyenne(l1)-moyenne(l2))#Calcul de la distance
             D.append(d)
+
     return D
-    # mini=minimum(D)
-    # maxi=maximum(D)
-    # for z in D:
-    #     d_n=(maxi-z)/(maxi-mini)
-    #     D_n.append(d_n)
-    # similaire=moyenne(D_n)*100
-    # return 'Les deux capteurs sont similaires à {} pourcents'.format(similaire)
+
 
 # print(distance(c1_lum,c1_date,c2_lum,c2_date,base_temps))
 # print(distance(c1_lum,c1_date,c3_lum,c3_date,base_temps))
@@ -597,27 +594,56 @@ for i in range(taille_n):
     for j in range(i+1,taille_n):
         D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
 
-# taille_D=len(D_capteurs)
-# t=len(D_capteurs[0])
-# L_mini=[]
-# L_maxi=[]
-# for i in range(len(ta)):#Parcourt les indices des distances entre deux capteurs
-#     mini=D_capteurs[0][i]
-#     maxi=D_capteurs[0][i]
-#     for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
-#         if D_capteurs[j][i]>maxi:
-#             maxi=D_capteurs[j][i]
-#         if D_capteurs[j][i]<mini:
-#             mini=D_capteurs[j][i]
-#     L_mini.append(mini)
-#     L_maxi.append(maxi)
+taille_D=len(D_capteurs)
+t=len(D_capteurs[0])
+Lmini=[]
+Lmaxi=[]
+for i in range(t):#Parcourt les indices des distances entre deux capteurs
+    mini=D_capteurs[0][i]
+    maxi=D_capteurs[0][i]
+    c=0
+    while mini==None:
+        if c==taille_D-1:
+            mini=None
+        else:
+            c+=1
+            mini=D_capteurs[c][i]
+    while maxi==None:
+        if c==taille_D-1:
+            maxi=None
+        else:
+            c+=1
+            maxi=capteurs[c][i]
+    for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
+        if type(D_capteurs[j][i])==float:
+            if D_capteurs[j][i]>maxi:
+                maxi=D_capteurs[j][i]
+            if D_capteurs[j][i]<mini:
+                mini=D_capteurs[j][i]
+    Lmini.append(mini)
+    Lmaxi.append(maxi)
 
 # ##Normalisation
 # for x in D_capteurs:
 #     for i in range(t):
-#         x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
+#         if type(x[i])==float:
+#             x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
 
-print(len(D_capteurs[2]),len(D_capteurs[3]))
+# ## Similairarités
+# similaire_p=[]
+# for z in D_capteurs:
+#     M=[]
+#     for u in range(t):
+#         if type(z)==float:
+#             M.append(z)
+#     similaire_p=(moyenne(M)*100)
+
+# 'Les deux capteurs c1 et c2 sont similaires à {} pourcents'.format(similaire_p[0])
+
+
+
+
+print(Lmini,Lmaxi)
 
 
 
@@ -635,6 +661,49 @@ def horaires (liste_luminosité, liste_dates):#Préciser la liste de date à met
     return occupe
 
 
+
+def bruit_jour(L1, L1_t):#Sépare la liste des bruits par jours
+    L_indj=[0]#Future liste comportant les indices, lorsque la liste des temps change de jour.
+    noise_jour=[]#Future liste de liste séparée par jour
+    a=jourd#Jour de départ
+    for x in L1_t:#Boucle sur la liste des dates.
+        if int(x[8:11])==a:#Condition déterminant si le jour est le même que le précédent
+            a=int(x[8:11])#a prend la nouvelle valeur du jour
+        else:
+            a=int(x[8:11])
+            L_indj.append(L1_t.index(x))#Si la date du jour est différente de la date précédente, on ajoute son indice dans la liste.
+    L_indj.append(len(L1))#On ajoute le dernier indice de la liste des temps
+    for i in range(len(L_indj)-1):
+        i_d=L_indj[i]
+        i_f=L_indj[i+1]
+        noise_jour.append(L1[i_d:i_f])#A l'aide de la liste des indices, on sépare la liste L1 suivant les différents jours.
+    return noise_jour
+
+def moye_bruit(L_bruit, L_date):
+    bruit=bruit_jour(L_bruit,L_date)
+    M=[]
+    l=len(bruit)
+    for i in range (l):
+        m=moyenne(bruit[i])
+        M.append(m)
+    return M
+
+def weekend(L_bruit,L_date):
+    semaine=[]
+    week_end=[]
+    M=moye_bruit(L_bruit,L_date)
+    j=int(L_date[0][8:10])#on rÃ©cupÃ¨re le premier jour
+    n=len(M) #on rÃ©cupÃ¨re le nombre de jours
+    for i in range (n):
+        if M[i]>29.5:
+            semaine.append(j)
+        else :
+            week_end.append(j)
+        j=j+1
+    return 'Les {} et {} août sont des week-ends\nLes {} et {} août tombent pendant la semaine'.format(week_end[:2],week_end[2:],semaine[:5],semaine[5:])
+
+
+print(weekend(c1_noise,c1_date))
 def occupation_bu(L1,L1_t):
     L=[]#Tous les indices lorsque les bureaux sont allumés
     n=len(L1)
@@ -653,54 +722,7 @@ def occupation_bu(L1,L1_t):
     if L1[-1]>=150:
         L_ind.append(n-1)#Liste ne comportant les indices seulement de début et de fin lorsque x>150.
     for x in L_ind:
-        Occ_bureaux.append(L1_t[x][5:])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
+        Occ_bureaux.append(L1_t[x])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
     return Occ_bureaux
-
-
-
-
-def bruit_jour(L1, L1_t):                   #Sépare la liste des bruits par jours
-    L_indj=[0]                              #Future liste comportant les indices, lorsque la liste des temps change de jour.
-    noise_jour=[]                           #Future liste de liste séparée par jour
-    a=jourd                                 #Jour de départ
-    for x in L1_t:                          #Boucle sur la liste des dates.
-        if int(x[8:11])==a:                 #Condition déterminant si le jour est le même que le précédent
-            a=int(x[8:11])                  #a prend la nouvelle valeur du jour
-        else:
-            a=int(x[8:11])
-            L_indj.append(L1_t.index(x))    #Si la date du jour est différente de la date précédente, on ajoute son indice dans la liste.
-    L_indj.append(len(L1))                  #On ajoute le dernier indice de la liste des temps
-    for i in range(len(L_indj)-1):
-        i_d=L_indj[i]
-        i_f=L_indj[i+1]
-        noise_jour.append(L1[i_d:i_f])      #A l'aide de la liste des indices, on sépare la liste L1 suivant les différents jours.
-    return noise_jour
-
-
-def moye_bruit(L_bruit, L_date):
-    bruit=bruit_jour(L_bruit,L_date)
-    M=[]
-    l=len(bruit)
-    for i in range (l):
-        m=moyenne(bruit[i])
-        M.append(m)
-    return M
-
-def weekend(L_bruit,L_date):
-    semaine=[]
-    week_end=[]
-    M=moye_bruit(L_bruit,L_date)
-    j=int(L_date[0][8:10])          #on récupère le premier jour
-    n=len(M)                        #on récupère le nombre de jours
-    for i in range (n):
-        if M[i]>29.5:
-            semaine.append(j)
-        else :
-            week_end.append(j)
-        j=j+1
-    return 'Les {} et {} août sont des week-ends\nLes {} et {} août tombent pendant la semaine'.format(week_end[:2],week_end[2:],semaine[:5],semaine[5:])
-
-
-
 
 
