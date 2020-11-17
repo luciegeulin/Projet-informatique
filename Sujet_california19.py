@@ -579,7 +579,7 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
         else:
             d=abs(moyenne(l1)-moyenne(l2))#Calcul de la distance
             D.append(d)
-        
+
     return D
 
 
@@ -673,15 +673,16 @@ def weekend(L_bruit,L_date):
     semaine=[]
     week_end=[]
     M=moye_bruit(L_bruit,L_date)
-    j=int(L_date[0][8:10])#on rÃ©cupÃ¨re le premier jour
-    n=len(M) #on rÃ©cupÃ¨re le nombre de jours
+    j=int(L_date[0][8:10])              #on récupère le premier jour
+    n=len(M)                            #on récupère le nombre de jours
     for i in range (n):
         if M[i]>29.5:
             semaine.append(j)
         else :
             week_end.append(j)
         j=j+1
-    return 'Les {} et {} août sont des week-ends\nLes {} et {} août tombent pendant la semaine'.format(week_end[:2],week_end[2:],semaine[:5],semaine[5:])                                                                                                   
+    return week_end
+
 
 
 print(weekend(c1_noise,c1_date))
