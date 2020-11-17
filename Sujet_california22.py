@@ -682,7 +682,7 @@ def weekend(L_bruit,L_date):
         else :
             week_end.append(j)
         j=j+1
-<<<<<<< HEAD
+
     return week_end, semaine 
 
 nw=len(weekend(c1_noise,c1_date)[0])
@@ -693,10 +693,9 @@ for i in range(0,nw,2):
 
 for i in range(0,ns,5):
     print('Le {} août tombent en semaine.'.format(weekend(c1_noise, c1_date)[1][i:i+5]))
-=======
-    return week_end
 
->>>>>>> 7470340be73f0986d5d92c1af6737f7d9f2293c7
+
+
 
 
 def occupation_bu(L1,L1_t):
