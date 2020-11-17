@@ -106,7 +106,9 @@ fin='2019-08-25'
 
 
 
-# ##Bonus: Spécifier un intervalle de temps
+##Bonus: Spécifier un intervalle de temps
+
+
 # debut=str(input('start_date:aaaa-mm-jj '))        #Demande de la date de départ
 # fin=str(input('end_date:aaaa-mm-jj '))            #Demande de la date de fin
 
@@ -236,6 +238,69 @@ def variance(L1):
 def ecart_type(L1):
     return (sqrt(variance(L1)))
 
+#Médiane
+#Organiser la série:
+def insertionSort(L):
+    for i in range(1,len(L)):
+        elm=L[i]
+        j=i-1
+        while j>=0 and elm<L[j]:
+            L[j+1]=L[j]
+            j-=1
+            L[j+1]=elm
+    return L
+
+def mediane(L):
+    Lt=insertionSort(L)
+    taille=len(insertionSort(Lt))+1
+    mediane=moyenne([Lt[int(taille/2)-1],Lt[int(taille/2)]])
+    return mediane
+
+
+## HUMIDEX
+a=17.27
+b=237.7
+
+#On a besoin de l'humidité relative pour le calcul de la température de rosée (je suis pas sûre que ça soit utile)
+hum_pourc1=[x/100 for x in c1_humidity]
+hum_pourc2=[x/100 for x in c2_humidity]
+hum_pourc3=[x/100 for x in c3_humidity]
+hum_pourc4=[x/100 for x in c4_humidity]
+hum_pourc5=[x/100 for x in c5_humidity]
+hum_pourc6=[x/100 for x in c6_humidity]
+
+def alpha(T,h):
+    alp=a*T/(b+T)+log(h)
+    return alp
+
+
+def Tros(T,h):
+    return b*alpha(T,h)/(a-alpha(T,h))
+
+def humidex(T,h):
+    c=1/273.16-1/(273.16+Tros(T,h))
+    hd=T+0.5555*(6.11*exp(5417.7530*c)-10)
+    return hd
+
+
+#Pour ces trois fonctions, l'humidité doit être comprise entre 0 et 1
+
+# ##Coefficient de corrélation
+# #Calcul de la covariance
+# def cov(X,Y):
+#     n=len(X)
+#     s=0
+#     mx=moyenne(X)
+#     my=moyenne(Y)
+#     for i in range (n):
+#         s=s+(X[i]-mx)*(Y[i]-my)
+#         cv=(1/n)*s
+#     return cv
+
+# #Calcul du coefficient de corrélation
+# def cor(X,Y):
+#     return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
+
 
 #Courbe maximum
 def courbe_max1(L_t,L):
@@ -297,43 +362,11 @@ def courbe_moy(y1):
 
 
 
-#Courbe de la variance
-def courbe_variance(y1):
-    plt.axhline(y=variance(y1),color='green', label='Variance')
-    plt.legend()
-
-#Courbe de l'écart-type
-def courbe_ectype(y1):
-    plt.axhline(y=ecart_type(y1),color='orange',linestyle='--',label='Ecart type')
-    plt.legend()
 
 
 
-#Médiane
-#Organiser la série:
-def insertionSort(L):
-    for i in range(1,len(L)):
-        elm=L[i]
-        j=i-1
-        while j>=0 and elm<L[j]:
-            L[j+1]=L[j]
-            j-=1
-            L[j+1]=elm
-    return L
-
-def mediane(L):
-    Lt=insertionSort(L)
-    taille=len(insertionSort(Lt))+1
-    mediane=moyenne([Lt[int(taille/2)-1],Lt[int(taille/2)]])
-    return mediane
-
-#Courbe médiane
-def courbe_mediane(L):
-    plt.axhline(y=mediane(L),color='purple',label="Mediane")
-    plt.legend()
 ## GRAPHIQUES
 
-n=jourf-jourd+1         # n correspond au nombre de jours demandés
 
 ### GRAPHIQUE NOISE
 axes = plt.gca()
@@ -501,49 +534,7 @@ axes.set_ylabel('Luminosité en lux')
 plt.show()
 
 
-## HUMIDEX
-a=17.27
-b=237.7
 
-#On a besoin de l'humidité relative pour le calcul de la température de rosée (je suis pas sûre que ça soit utile)
-hum_pourc1=[x/100 for x in c1_humidity]
-hum_pourc2=[x/100 for x in c2_humidity]
-hum_pourc3=[x/100 for x in c3_humidity]
-hum_pourc4=[x/100 for x in c4_humidity]
-hum_pourc5=[x/100 for x in c5_humidity]
-hum_pourc6=[x/100 for x in c6_humidity]
-
-def alpha(T,h):
-    alp=a*T/(b+T)+log(h)
-    return alp
-
-
-def Tros(T,h):
-    return b*alpha(T,h)/(a-alpha(T,h))
-
-def humidex(T,h):
-    c=1/273.16-1/(273.16+Tros(T,h))
-    hd=T+0.5555*(6.11*exp(5417.7530*c)-10)
-    return hd
-
-
-#Pour ces trois fonctions, l'humidité doit être comprise entre 0 et 1
-
-# ##Coefficient de corrélation
-# #Calcul de la covariance
-# def cov(X,Y):
-#     n=len(X)
-#     s=0
-#     mx=moyenne(X)
-#     my=moyenne(Y)
-#     for i in range (n):
-#         s=s+(X[i]-mx)*(Y[i]-my)
-#         cv=(1/n)*s
-#     return cv
-
-# #Calcul du coefficient de corrélation
-# def cor(X,Y):
-#     return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
 
 
 #Liste des données de chaque capteur avec le titre
@@ -558,6 +549,7 @@ base_temps=[x*60 for x in range(0,20940,60)]
 
 noise=[c1_noise,c2_noise,c3_noise,c4_noise,c5_noise,c6_noise]
 date=[c1_date,c2_date,c3_date,c4_date,c5_date,c6_date]
+
 def distance(L1,l1_t,L2,l2_t,base_temps):
     L1_t=date_convertie(l1_t)
     L2_t=date_convertie(l2_t)
@@ -583,10 +575,6 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
 
     return D
 
-
-# print(distance(c1_lum,c1_date,c2_lum,c2_date,base_temps))
-# print(distance(c1_lum,c1_date,c3_lum,c3_date,base_temps))
-# print(distance(c3_lum,c3_date,c5_lum,c5_date,base_temps))
 
 ##distances capteurs
 D_capteurs=[]
@@ -692,9 +680,6 @@ for i in range(0,nw,2):
 
 for i in range(0,ns,5):
     print('Le {} août tombent en semaine.'.format(weekend(c1_noise, c1_date)[1][i:i+5]))
-
-
-
 
 
 def occupation_bu(L1,L1_t):
