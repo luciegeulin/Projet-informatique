@@ -735,4 +735,8 @@ def horaire_semaine(L_lum,L_date,L_noise):
             L.append(hor[i])
     return L
 
-
+print(horaire_semaine(c1_lum,c1_date,c1_noise))
+occ_bur=horaire_semaine(c1_lum,c1_date,c1_noise)
+for i in range(0,len(occ_bur)-1,2):
+    print('Les bureaux étaient ouverts de {} à {} le {} août.'.format(occ_bur[i][3:8],occ_bur[i+1][3:8], occ_bur[i][0:2]))
+    
