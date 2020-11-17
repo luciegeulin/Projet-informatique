@@ -362,7 +362,7 @@ def courbe_moy(y1):
 
 
 
-
+n=jourf-jourd+1
 
 ## GRAPHIQUES
 
@@ -581,13 +581,13 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
 
 caractéristiques=[noise,temperature,humidity,luminosity,co2]
 s_capt_car=[]#Liste de liste comportant les distances des capteurs deux à deux pour chaque caractéristique
-for elm in caractéristiques:
+for c in caractéristiques:
     ##distances capteurs
     D_capteurs=[]
-    taille_n=len(noise)
+    taille_n=len(c)
     for i in range(taille_n):
         for j in range(i+1,taille_n):
-            D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
+            D_capteurs.append(distance(c[i],date[i],c[j],date[j],base_temps))
 
     taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
     t=len(D_capteurs[0])#Nombre de mesures réalisées
@@ -628,59 +628,24 @@ for elm in caractéristiques:
         for u in range(t):
             if type(z[u])==float:
                 M.append(z[u])
-        similaire_p.append((moyenne(M)*100))
+        similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
     
-print(s_capt_car) 
-        
 
-# ##distances capteurs
-# D_capteurs=[]
-# taille_n=len(noise)
-# for i in range(taille_n):
-#     for j in range(i+1,taille_n):
-#         D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
+#Définition des seuils de similarités.
+seuils=[80,65,70,70,85]
+comparaison_capt=[['1', '2'],[ '1', '3'],['1', '4'],['1','5'],['1', '6'],['2', '3'],['2', '4'],['2', '5'],['2', '6'],['3', '4'],['3', '5'],['3', '5'],['3', '6'],['4', '5'],['5', '6']]
+carac=['du bruit.','de la température.', "de l'humidité.", 'de la lumière.', "du co2."]
+ns=len(seuils)
+nc=len(comparaison_capt)
 
-# taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
-# t=len(D_capteurs[0])#Nombre de mesures réalisées
-# Lmini=[]
-# Lmaxi=[]
-# for i in range(t):#Parcourt les indices des distances entre deux capteurs
-#     mini=D_capteurs[0][i]
-#     maxi=D_capteurs[0][i]
-#     if mini==None:
-#         for k in range(taille_D-1):
-#             mini=D_capteurs[k+1][i]
-#     if maxi==None:
-#         for k in range(taille_D-1):
-#             maxi=D_capteurs[k+1][i]
-#     for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
-#         if type(D_capteurs[j][i])==float:
-#             if D_capteurs[j][i]>maxi:
-#                 maxi=D_capteurs[j][i]
-#             if D_capteurs[j][i]<mini:
-#                 mini=D_capteurs[j][i]
-#     Lmini.append(mini)
-#     Lmaxi.append(maxi)
+for i in range(ns):
+    for j in range(nc):
+        if s_capt_car[i][j]>=seuils[i]:
+            print('Les capteurs {} et {} sont similaires vis à vis {}'.format(comparaison_capt[j][0],comparaison_capt[j][1],carac[i]))
+            
 
 
-# ##Normalisation
-# for x in D_capteurs:
-#     for i in range(t):
-#         if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
-#             x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
-#         else:
-#             x[i]=None
-
-
-# ## Similairarités
-# similaire_p=[]
-# for z in D_capteurs:
-#     M=[]
-#     for u in range(t):
-#         if type(z[u])==float:
-#             M.append(z[u])
-#     similaire_p.append((moyenne(M)*100))
 
 
 
