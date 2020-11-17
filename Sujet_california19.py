@@ -136,28 +136,6 @@ c5_date=[elm for elm in c5_d if jourd<=int(elm[8:10])<=jourf]
 c6_date=[elm for elm in c6_d if jourd<=int(elm[8:10])<=jourf]
 
 
-
-def date_convertie(L):
-    n=len(L)
-    Lc=[]
-    for i in range(n):
-        j=j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
-        h=int(L[i][11:13])                      #Récupération de l'heure
-        m=int(L[i][14:16])                      #Récupération du nombre de minutes
-        s=int(L[i][17:19])                      #Récupération du nombre de secondes
-        conv=j*24*(60**2)+h*(60**2)+m*60+s      #Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
-        Lc.append(conv)
-    return Lc
-
-temps_c1=date_convertie(c1_date)                #Liste avec les dates de mesures converties en secondes.
-temps_c2=date_convertie(c2_date)
-temps_c3=date_convertie(c3_date)
-temps_c4=date_convertie(c4_date)
-temps_c5=date_convertie(c5_date)
-temps_c6=date_convertie(c6_date)
-
-
-
 #Données en fonction de cette nouvelle plage de temps
 ind_d1,ind_f1=int(c1_d.index(c1_date[0])),int(c1_d.index(c1_date[-1]))#Récupération des indices des dates compris dans les dates demandées, afin que la liste de temps et celle de données soient de même taille.
 ind_d2,ind_f2=int(c2_d.index(c2_date[0])),int(c2_d.index(c2_date[-1]))
@@ -202,6 +180,27 @@ c6_temp=c6_t[ind_d6:ind_f6+1]
 c6_humidity=c6_h[ind_d6:ind_f6+1]
 c6_lum=c6_l[ind_d6:ind_f6+1]
 c6_co2=c6_c[ind_d6:ind_f6+1]
+
+
+
+def date_convertie(L):
+    n=len(L)
+    Lc=[]
+    for i in range(n):
+        j=j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
+        h=int(L[i][11:13])                      #Récupération de l'heure
+        m=int(L[i][14:16])                      #Récupération du nombre de minutes
+        s=int(L[i][17:19])                      #Récupération du nombre de secondes
+        conv=j*24*(60**2)+h*(60**2)+m*60+s      #Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
+        Lc.append(conv)
+    return Lc
+
+temps_c1=date_convertie(c1_date)                #Liste avec les dates de mesures converties en secondes.
+temps_c2=date_convertie(c2_date)
+temps_c3=date_convertie(c3_date)
+temps_c4=date_convertie(c4_date)
+temps_c5=date_convertie(c5_date)
+temps_c6=date_convertie(c6_date)
 
 
 ### Fonctions demandées:
@@ -535,8 +534,6 @@ plt.show()
 
 
 
-
-
 #Liste des données de chaque capteur avec le titre
 cap1=[['c1_noise']+c1_noise,['c1_temp']+c1_temp,['c1_humidity']+c1_humidity,['c1_lum']+c1_lum,['c1_co2']+c1_co2]
 cap2=[['c2_noise']+c2_noise,['c2_temp']+c2_temp,['c2_humidity']+c2_humidity,['c2_lum']+c2_lum,['c2_co2']+c2_co2]
@@ -548,6 +545,13 @@ cap6=[['c6_noise']+c6_noise,['c6_temp']+c6_temp,['c6_humidity']+c6_humidity,['c6
 base_temps=[x*60 for x in range(0,20940,60)]
 
 noise=[c1_noise,c2_noise,c3_noise,c4_noise,c5_noise,c6_noise]
+temperature=[c1_temp,c2_temp,c3_temp,c4_temp,c5_temp,c6_temp]
+humidity=[c1_humidity,c2_humidity,c3_humidity,c4_humidity,c5_humidity,c6_humidity]
+luminosity=[c1_lum,c2_lum,c3_lum,c4_temp,c5_temp,c6_temp]
+
+
+
+
 date=[c1_date,c2_date,c3_date,c4_date,c5_date,c6_date]
 
 def distance(L1,l1_t,L2,l2_t,base_temps):
@@ -683,24 +687,25 @@ for i in range(0,ns,5):
 
 
 
-def occupation_bu(L1,L1_t):
+def occupation_bu(L1_lum,L1_t):
     L=[]#Tous les indices lorsque les bureaux sont allumés
-    n=len(L1)
+    n=len(L1_lum)
     Occ_bureaux=[]
     for i in range(n):
-        if L1[i]>= 150:
+        if L1_lum[i]>= 150:
             L.append(i)#Liste comportant les indices tq la valeur de luminosité soit supérieur au seuil.
     n1=len(L)
     L_ind=[]
-    if L1[0]>=150:
+    if L1_lum[0]>=150:
         L_ind.append(0)
     for j in range(n1-1) :
         if (L[j+1]-L[j])>1:
             L_ind.append(L[j])
             L_ind.append(L[j+1])
-    if L1[-1]>=150:
+    if L1_lum[-1]>=150:
         L_ind.append(n-1)#Liste ne comportant les indices seulement de début et de fin lorsque x>150.
     for x in L_ind:
-        Occ_bureaux.append(L1_t[x])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
+        Occ_bureaux.append(L1_t[x][8:])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
     return Occ_bureaux
+print(occupation_bu(c1_lum, c1_date))
 
