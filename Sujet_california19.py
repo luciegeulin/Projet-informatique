@@ -707,5 +707,5 @@ def occupation_bu(L1_lum,L1_t):
     for x in L_ind:
         Occ_bureaux.append(L1_t[x][8:])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
     return Occ_bureaux
-print(occupation_bu(c1_lum, c1_date))
+
 
