@@ -44,13 +44,13 @@ for i in range(0,l):
         c6.append(donnees[i])
 
 #Données capteur1
-c1_n=[float(x[2]) for x in c1]#Récupération de la première colonne des données du capteur 1, ici, le bruit.
-c1_t=[float(x[3]) for x in c1]#Récupération de la température du capteur 1.
-c1_h=[float(x[4]) for x in c1]#Récupération de l'humidité du capteur 1.
-c1_l=[float(x[5]) for x in c1]#Récupération de la lumière du capteur 1.
-c1_c=[float(x[6]) for x in c1]#Récupération du CO2 du capteur 1.
-c1_d=[x[7].strip().split('\n')for x in c1]#Suppression de '\n'
-c1_d=[x[0][:19]for x in c1_d]#Suppression de '+00:20'
+c1_n=[float(x[2]) for x in c1]                 #Récupération de la première colonne des données du capteur 1, ici, le bruit.
+c1_t=[float(x[3]) for x in c1]                 #Récupération de la température du capteur 1.
+c1_h=[float(x[4]) for x in c1]                 #Récupération de l'humidité du capteur 1.
+c1_l=[float(x[5]) for x in c1]                 #Récupération de la lumière du capteur 1.
+c1_c=[float(x[6]) for x in c1]                 #Récupération du CO2 du capteur 1.
+c1_d=[x[7].strip().split('\n')for x in c1]     #Suppression de '\n'
+c1_d=[x[0][:19]for x in c1_d]                  #Suppression de '+00:20'
 
 
 #Données capteur2
@@ -107,14 +107,14 @@ fin='2019-08-25'
 
 
 # ##Bonus: Spécifier un intervalle de temps
-# debut=str(input('start_date:aaaa-mm-jj '))#Demande de la date de départ
-# fin=str(input('end_date:aaaa-mm-jj '))#Demande de la date de fin
+# debut=str(input('start_date:aaaa-mm-jj '))        #Demande de la date de départ
+# fin=str(input('end_date:aaaa-mm-jj '))            #Demande de la date de fin
 
 
 
 anneed=int(debut[:4])
 moisd=int(debut[5:7])
-jourd=int(debut[8:])#Récupération du jour de départ (Seule donnée utile par rapport à la référence car toutes les mesures sont faites au mois d'août 2019)
+jourd=int(debut[8:])        #Récupération du jour de départ (Seule donnée utile par rapport à la référence car toutes les mesures sont faites au mois d'août 2019)
 
 anneef=int(fin[:4])
 moisf=int(fin[5:7])
@@ -122,8 +122,8 @@ jourf=int(fin[8:])
 
 
 
-assert anneed==2019 and anneef==2019, "Vous devez saisir l'année 2019"#D'après les dates de mesures des capteurs,toutes les mesures sont réalisées en 2020, le assert permet de vérifier que l'utilisateur entre bien l'année 2020
-assert moisd==8 and moisf==8, "Vous devez saisir le mois d'août"#D'après les dates de mesures des capteurs,toutes les mesures sont réalisées en septembre, le assert permet de vérifier que l'utilisateur entre bien le mois de septembre.
+assert anneed==2019 and anneef==2019, "Vous devez saisir l'année 2019"#D'après les dates de mesures des capteurs,toutes les mesures sont réalisées en 2019, le assert permet de vérifier que l'utilisateur entre bien l'année 2019
+assert moisd==8 and moisf==8, "Vous devez saisir le mois d'août"#D'après les dates de mesures des capteurs,toutes les mesures sont réalisées en août, le assert permet de vérifier que l'utilisateur entre bien le mois d'août.
 assert  11<=jourd<=25 and 11<=jourf<=25, "La jour doit être compris entre le 11 et le 25"#D'après les dates de mesures des capteurs,toutes les mesures sont réalisées entre le 11 et le 25, le assert permet de vérifier que l'utilisateur entre bien des dates entre le 11 et le 25.
 
 c1_date=[elm for elm in c1_d if jourd<=int(elm[8:10])<=jourf]
@@ -139,15 +139,15 @@ def date_convertie(L):
     n=len(L)
     Lc=[]
     for i in range(n):
-        j=j=int(L[i][8:10])-11#Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
-        h=int(L[i][11:13])#Récupération de l'heure
-        m=int(L[i][14:16])#Récupération du nombre de minutes
-        s=int(L[i][17:19])#Récupération du nombre de secondes
-        conv=j*24*(60**2)+h*(60**2)+m*60+s#Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
+        j=j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
+        h=int(L[i][11:13])                      #Récupération de l'heure
+        m=int(L[i][14:16])                      #Récupération du nombre de minutes
+        s=int(L[i][17:19])                      #Récupération du nombre de secondes
+        conv=j*24*(60**2)+h*(60**2)+m*60+s      #Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
         Lc.append(conv)
     return Lc
 
-temps_c1=date_convertie(c1_date)#Liste avec les dates de mesures converties en secondes.
+temps_c1=date_convertie(c1_date)                #Liste avec les dates de mesures converties en secondes.
 temps_c2=date_convertie(c2_date)
 temps_c3=date_convertie(c3_date)
 temps_c4=date_convertie(c4_date)
@@ -210,6 +210,7 @@ def maximum(L1):
         if elm>maxi:
             maxi=elm
     return maxi
+
 #Minimum
 def minimum(L1):
     mini=L1[0]
@@ -332,7 +333,7 @@ def courbe_mediane(L):
     plt.legend()
 ## GRAPHIQUES
 
-n=jourf-jourd+1         #n correspond au nombre de jours demandés
+n=jourf-jourd+1         # n correspond au nombre de jours demandés
 
 ### GRAPHIQUE NOISE
 axes = plt.gca()
@@ -361,8 +362,8 @@ courbe_max4(temps_c4,c4_noise)
 courbe_max5(temps_c5,c5_noise)
 courbe_max6(temps_c6,c6_noise)
 plt.legend()
-plt.xticks([86400*i for i in range (n)]) # On a ainsi une graduation toutes les 86400 secondes, donc tous les jours
-axes.xaxis.set_ticklabels([jourd+i for i in range(n)])  #On renomme des gradutations avec le numéro de jour correspondant
+plt.xticks([86400*i for i in range (n)])                        # On a ainsi une graduation toutes les 86400 secondes, donc tous les jours
+axes.xaxis.set_ticklabels([jourd+i for i in range(n)])          #On renomme des graduations avec le numéro de jour correspondant
 axes.set_xlabel("Jours du mois d'août")
 axes.set_ylabel('Niveau sonore en dBA')
 plt.show()
