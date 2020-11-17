@@ -547,9 +547,8 @@ base_temps=[x*60 for x in range(0,20940,60)]
 noise=[c1_noise,c2_noise,c3_noise,c4_noise,c5_noise,c6_noise]
 temperature=[c1_temp,c2_temp,c3_temp,c4_temp,c5_temp,c6_temp]
 humidity=[c1_humidity,c2_humidity,c3_humidity,c4_humidity,c5_humidity,c6_humidity]
-luminosity=[c1_lum,c2_lum,c3_lum,c4_temp,c5_temp,c6_temp]
-
-
+luminosity=[c1_lum,c2_lum,c3_lum,c4_lum,c5_lum,c6_lum]
+co2=[c1_co2,c2_co2,c3_co2,c4_co2,c5_co2,c6_co2]
 
 
 date=[c1_date,c2_date,c3_date,c4_date,c5_date,c6_date]
@@ -576,61 +575,112 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
         else:
             d=abs(moyenne(l1)-moyenne(l2))#Calcul de la distance
             D.append(d)
-
     return D
 
 
-##distances capteurs
-D_capteurs=[]
-taille_n=len(noise)
-for i in range(taille_n):
-    for j in range(i+1,taille_n):
-        D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
 
-taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
-t=len(D_capteurs[0])#Nombre de mesures réalisées
-Lmini=[]
-Lmaxi=[]
-for i in range(t):#Parcourt les indices des distances entre deux capteurs
-    mini=D_capteurs[0][i]
-    maxi=D_capteurs[0][i]
-    if mini==None:
-        for k in range(taille_D-1):
-            mini=D_capteurs[k+1][i]
-    if maxi==None:
-        for k in range(taille_D-1):
-            maxi=D_capteurs[k+1][i]
-    for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
-        if type(D_capteurs[j][i])==float:
-            if D_capteurs[j][i]>maxi:
-                maxi=D_capteurs[j][i]
-            if D_capteurs[j][i]<mini:
-                mini=D_capteurs[j][i]
-    Lmini.append(mini)
-    Lmaxi.append(maxi)
+caractéristiques=[noise,temperature,humidity,luminosity,co2]
+s_capt_car=[]#Liste de liste comportant les distances des capteurs deux à deux pour chaque caractéristique
+for elm in caractéristiques:
+    ##distances capteurs
+    D_capteurs=[]
+    taille_n=len(noise)
+    for i in range(taille_n):
+        for j in range(i+1,taille_n):
+            D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
 
-
-##Normalisation
-for x in D_capteurs:
-    for i in range(t):
-        if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
-            x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
-        else:
-            x[i]=None
+    taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
+    t=len(D_capteurs[0])#Nombre de mesures réalisées
+    Lmini=[]
+    Lmaxi=[]
+    for i in range(t):#Parcourt les indices des distances entre deux capteurs
+        mini=D_capteurs[0][i]
+        maxi=D_capteurs[0][i]
+        if mini==None:
+            for k in range(taille_D-1):
+                mini=D_capteurs[k+1][i]
+        if maxi==None:
+            for k in range(taille_D-1):
+                maxi=D_capteurs[k+1][i]
+        for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
+            if type(D_capteurs[j][i])==float:
+                if D_capteurs[j][i]>maxi:
+                    maxi=D_capteurs[j][i]
+                if D_capteurs[j][i]<mini:
+                    mini=D_capteurs[j][i]
+        Lmini.append(mini)
+        Lmaxi.append(maxi)
 
 
-## Similairarités
-similaire_p=[]
-for z in D_capteurs:
-    M=[]
-    for u in range(t):
-        if type(z[u])==float:
-            M.append(z[u])
-    similaire_p.append((moyenne(M)*100))
+    ##Normalisation
+    for x in D_capteurs:
+        for i in range(t):
+            if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
+                x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
+            else:
+                x[i]=None
 
 
-print(similaire_p)
-'Les deux capteurs c1 et c2 sont similaires à {} pourcents'.format(similaire_p[0])
+    ## Similairarités
+    similaire_p=[]
+    for z in D_capteurs:
+        M=[]
+        for u in range(t):
+            if type(z[u])==float:
+                M.append(z[u])
+        similaire_p.append((moyenne(M)*100))
+    s_capt_car.append(similaire_p)
+    
+print(s_capt_car) 
+        
+
+# ##distances capteurs
+# D_capteurs=[]
+# taille_n=len(noise)
+# for i in range(taille_n):
+#     for j in range(i+1,taille_n):
+#         D_capteurs.append(distance(noise[i],date[i],noise[j],date[j],base_temps))
+
+# taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
+# t=len(D_capteurs[0])#Nombre de mesures réalisées
+# Lmini=[]
+# Lmaxi=[]
+# for i in range(t):#Parcourt les indices des distances entre deux capteurs
+#     mini=D_capteurs[0][i]
+#     maxi=D_capteurs[0][i]
+#     if mini==None:
+#         for k in range(taille_D-1):
+#             mini=D_capteurs[k+1][i]
+#     if maxi==None:
+#         for k in range(taille_D-1):
+#             maxi=D_capteurs[k+1][i]
+#     for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
+#         if type(D_capteurs[j][i])==float:
+#             if D_capteurs[j][i]>maxi:
+#                 maxi=D_capteurs[j][i]
+#             if D_capteurs[j][i]<mini:
+#                 mini=D_capteurs[j][i]
+#     Lmini.append(mini)
+#     Lmaxi.append(maxi)
+
+
+# ##Normalisation
+# for x in D_capteurs:
+#     for i in range(t):
+#         if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
+#             x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
+#         else:
+#             x[i]=None
+
+
+# ## Similairarités
+# similaire_p=[]
+# for z in D_capteurs:
+#     M=[]
+#     for u in range(t):
+#         if type(z[u])==float:
+#             M.append(z[u])
+#     similaire_p.append((moyenne(M)*100))
 
 
 
@@ -707,5 +757,17 @@ def occupation_bu(L1_lum,L1_t):
     for x in L_ind:
         Occ_bureaux.append(L1_t[x][8:])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
     return Occ_bureaux
+
+#Puisqu'on a déterminé les week-end grâce au bruit, on peut enlever les week-ends des listes obtenues
+
+def horaire_semaine(L_lum,L_date,L_noise):
+    hor=occupation_bu(L_lum,L_date)
+    wk,sem=weekend(L_noise,L_date)          #On dispose des jours de week-end grâce au programme écrit précédemment
+    lh=len(hor)
+    L=[]
+    for i in range (lh):
+        if int(hor[i][:2]) not in wk:       #Si le jour ne tombe pas un week-end
+            L.append(hor[i])
+    return L
 
 
