@@ -681,10 +681,18 @@ def weekend(L_bruit,L_date):
         else :
             week_end.append(j)
         j=j+1
-    return 'Les {} et {} août sont des week-ends\nLes {} et {} août tombent pendant la semaine'.format(week_end[:2],week_end[2:],semaine[:5],semaine[5:])                                                                                                   
+    return week_end, semaine 
+
+nw=len(weekend(c1_noise,c1_date)[0])
+ns=len(weekend(c1_noise,c1_date)[1])
+
+for i in range(0,nw,2):
+    print('Le {} et {} août tombent un weekend.'.format(weekend(c1_noise, c1_date)[0][i],weekend(c1_noise, c1_date)[0][i+1]))
+
+for i in range(0,ns,5):
+    print('Le {} août tombent en semaine.'.format(weekend(c1_noise, c1_date)[1][i:i+5]))
 
 
-print(weekend(c1_noise,c1_date))
 def occupation_bu(L1,L1_t):
     L=[]#Tous les indices lorsque les bureaux sont allumés
     n=len(L1)
