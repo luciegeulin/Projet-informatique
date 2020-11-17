@@ -682,6 +682,7 @@ for i in range(0,ns,5):
     print('Le {} août tombent en semaine.'.format(weekend(c1_noise, c1_date)[1][i:i+5]))
 
 
+
 def occupation_bu(L1,L1_t):
     L=[]#Tous les indices lorsque les bureaux sont allumés
     n=len(L1)
