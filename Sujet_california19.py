@@ -647,7 +647,6 @@ for i in range(ns):
 
 
 
-print(D_capteurs)
 
 ## Détermination automatique des horaires d'occupation des bureaux
 
