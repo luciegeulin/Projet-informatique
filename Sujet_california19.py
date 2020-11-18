@@ -187,7 +187,7 @@ def date_convertie(L):
     n=len(L)
     Lc=[]
     for i in range(n):
-        j=j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
+        j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
         h=int(L[i][11:13])                      #Récupération de l'heure
         m=int(L[i][14:16])                      #Récupération du nombre de minutes
         s=int(L[i][17:19])                      #Récupération du nombre de secondes
