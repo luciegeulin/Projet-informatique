@@ -580,7 +580,7 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
 
 
 caractéristiques=[noise,temperature,humidity,luminosity,co2]
-s_capt_car=[]#Liste de liste comportant les distances des capteurs deux à deux pour chaque caractéristique
+s_capt_car=[]#Liste de liste comportant les distances normalisées des capteurs deux à deux pour chaque caractéristique
 for c in caractéristiques:
     ##distances capteurs
     D_capteurs=[]
@@ -647,7 +647,7 @@ for i in range(ns):
 
 
 
-
+print(D_capteurs)
 
 ## Détermination automatique des horaires d'occupation des bureaux
 
