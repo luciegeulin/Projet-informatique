@@ -136,6 +136,8 @@ c5_date=[elm for elm in c5_d if jourd<=int(elm[8:10])<=jourf]
 c6_date=[elm for elm in c6_d if jourd<=int(elm[8:10])<=jourf]
 
 
+
+
 #Données en fonction de cette nouvelle plage de temps
 ind_d1,ind_f1=int(c1_d.index(c1_date[0])),int(c1_d.index(c1_date[-1]))#Récupération des indices des dates compris dans les dates demandées, afin que la liste de temps et celle de données soient de même taille.
 ind_d2,ind_f2=int(c2_d.index(c2_date[0])),int(c2_d.index(c2_date[-1]))
@@ -701,26 +703,32 @@ for i in range(0,ns,5):
 
 
 
-def occupation_bu(L1_lum,L1_t):
+def occupation_bu(L1_lum,L1_d):
     L=[]#Tous les indices lorsque les bureaux sont allumés
     n=len(L1_lum)
-    Occ_bureaux=[]
+    occ_bureaux=[]
     for i in range(n):
-        if L1_lum[i]>= 150:
+        if L1_lum[i]>=150:
             L.append(i)#Liste comportant les indices tq la valeur de luminosité soit supérieur au seuil.
-    n1=len(L)
-    L_ind=[]
-    if L1_lum[0]>=150:
-        L_ind.append(0)
-    for j in range(n1-1) :
-        if (L[j+1]-L[j])>1:
-            L_ind.append(L[j])
-            L_ind.append(L[j+1])
-    if L1_lum[-1]>=150:
-        L_ind.append(n-1)#Liste ne comportant les indices seulement de début et de fin lorsque x>150.
-    for x in L_ind:
-        Occ_bureaux.append(L1_t[x][8:])#A l'aide des indices récupéré précédemment, on détermines les dates d'occupation des bureaux.
-    return Occ_bureaux
+    for x in L:
+        occ_bureaux.append(L1_d[x]) #Liste de toutes les dates où les bureaux sont allumés.   
+    #Ne récupère que les dates de début et de fin.
+    Lj=[]#Liste prenant les jours d'ouverture des bureaux
+    for x in occ_bureaux:
+        if int(x[8:10]) not in Lj:
+            Lj.append(int(x[8:10]))
+
+    occ_deb_fin=[]#Liste de comportant que deux dates par jour : celle de début et de fin d'ouverture des bureaux.
+    for x in Lj:
+        L_date=[]
+        for i in range(len(occ_bureaux)):
+            if int(occ_bureaux[i][8:10])==x:
+                L_date.append(occ_bureaux[i])#Récupération dans une liste de toutes les dates d'un même jour (car la luminosité peut baisser au cours de la journée)
+        occ_deb_fin.append(L_date[0][8:])#Récupération de l'heure la plus tôt
+        occ_deb_fin.append(L_date[-1][8:])#Récupération de l'heure la plus tardive
+    return(occ_deb_fin)
+
+
 
 #Puisqu'on a déterminé les week-end grâce au bruit, on peut enlever les week-ends des listes obtenues
 
@@ -734,8 +742,8 @@ def horaire_semaine(L_lum,L_date,L_noise):
             L.append(hor[i])
     return L
 
-print(horaire_semaine(c1_lum,c1_date,c1_noise))
+
 occ_bur=horaire_semaine(c1_lum,c1_date,c1_noise)
 for i in range(0,len(occ_bur)-1,2):
-    print('Les bureaux étaient ouverts de {} à {} le {} août.'.format(occ_bur[i][3:8],occ_bur[i+1][3:8], occ_bur[i][0:2]))
-    
+    print('Les bureaux étaient ouverts de {} à {} le {} août 2019.'.format(occ_bur[i][3:8],occ_bur[i+1][3:8], occ_bur[i][0:2]))
+   
