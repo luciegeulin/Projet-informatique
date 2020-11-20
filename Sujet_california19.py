@@ -561,28 +561,28 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
     D=[]
     #D_n=[]#Distance normalisée entre 0 et 1
     n=len(base_temps)
-    for i in range(1,n):#Indice parcourant la liste des temps
+    for i in range(1,n):                                        #Indice parcourant la liste des temps
         l1=[]
         l2=[]
-        for x in L1_t:#On parcourt les temps de L1_t
-            if base_temps[i-1]<=x<base_temps[i]:#Détermination des valeurs comprises dans un intervalle de 45 minutes.
-                j=L1_t.index(x)#Détermination des indices des éléments compris dans cet intervalle.
-                l1.append(L1[j])#Liste contenant les valeurs de la caractérique en question dans l'intervalle de temps de 45 minutes.
-        for y in L2_t:#Idem mais dans la seconde liste
+        for x in L1_t:                                          #On parcourt les temps de L1_t
+            if base_temps[i-1]<=x<base_temps[i]:                #Détermination des valeurs comprises dans un intervalle de 45 minutes.
+                j=L1_t.index(x)                                 #Détermination des indices des éléments compris dans cet intervalle.
+                l1.append(L1[j])                                #Liste contenant les valeurs de la caractérique en question dans l'intervalle de temps de 45 minutes.
+        for y in L2_t:                                          #Idem mais dans la seconde liste
             if base_temps[i-1]<=y<base_temps[i]:
                 z=L2_t.index(y)
                 l2.append(L2[z])
         if len(l1)==0 or len(l2)==0:
             D.append(None)
         else:
-            d=abs(moyenne(l1)-moyenne(l2))#Calcul de la distance
+            d=abs(moyenne(l1)-moyenne(l2))                      #Calcul de la distance
             D.append(d)
     return D
 
 
 
 caractéristiques=[noise,temperature,humidity,luminosity,co2]
-s_capt_car=[]#Liste de liste comportant les distances normalisées des capteurs deux à deux pour chaque caractéristique
+s_capt_car=[]                               #Liste de liste comportant les distances normalisées des capteurs deux à deux pour chaque caractéristique
 for c in caractéristiques:
     ##distances capteurs
     D_capteurs=[]
@@ -591,11 +591,11 @@ for c in caractéristiques:
         for j in range(i+1,taille_n):
             D_capteurs.append(distance(c[i],date[i],c[j],date[j],base_temps))
 
-    taille_D=len(D_capteurs)#Comparaison entre tous les capteurs : 15 listes
-    t=len(D_capteurs[0])#Nombre de mesures réalisées
+    taille_D=len(D_capteurs)                        #Comparaison entre tous les capteurs : 15 listes
+    t=len(D_capteurs[0])                            #Nombre de mesures réalisées
     Lmini=[]
     Lmaxi=[]
-    for i in range(t):#Parcourt les indices des distances entre deux capteurs
+    for i in range(t):                              #Parcourt les indices des distances entre deux capteurs
         mini=D_capteurs[0][i]
         maxi=D_capteurs[0][i]
         if mini==None:
@@ -604,7 +604,7 @@ for c in caractéristiques:
         if maxi==None:
             for k in range(taille_D-1):
                 maxi=D_capteurs[k+1][i]
-        for j in range(taille_D):#Parcourt les indices de toutes les comparaisons entre les capteurs.
+        for j in range(taille_D):                   #Parcourt les indices de toutes les comparaisons entre les capteurs.
             if type(D_capteurs[j][i])==float:
                 if D_capteurs[j][i]>maxi:
                     maxi=D_capteurs[j][i]
@@ -632,7 +632,7 @@ for c in caractéristiques:
                 M.append(z[u])
         similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
-    
+
 
 #Définition des seuils de similarités.
 seuils=[80,65,70,70,85]
@@ -645,28 +645,28 @@ for i in range(ns):
     for j in range(nc):
         if s_capt_car[i][j]>=seuils[i]:
             print('Les capteurs {} et {} sont similaires vis à vis {}'.format(comparaison_capt[j][0],comparaison_capt[j][1],carac[i]))
-            
+
 
 
 
 
 ## Détermination automatique des horaires d'occupation des bureaux
 
-def bruit_jour(L1, L1_t):#Sépare la liste des bruits par jours
-    L_indj=[0]#Future liste comportant les indices, lorsque la liste des temps change de jour.
-    noise_jour=[]#Future liste de liste séparée par jour
-    a=jourd#Jour de départ
-    for x in L1_t:#Boucle sur la liste des dates.
-        if int(x[8:11])==a:#Condition déterminant si le jour est le même que le précédent
-            a=int(x[8:11])#a prend la nouvelle valeur du jour
+def bruit_jour(L1, L1_t):                           #Sépare la liste des bruits par jours
+    L_indj=[0]                                      #Future liste comportant les indices, lorsque la liste des temps change de jour.
+    noise_jour=[]                                   #Future liste de liste séparée par jour
+    a=jourd                                         #Jour de départ
+    for x in L1_t:                                  #Boucle sur la liste des dates.
+        if int(x[8:11])==a:                         #Condition déterminant si le jour est le même que le précédent
+            a=int(x[8:11])                          #a prend la nouvelle valeur du jour
         else:
             a=int(x[8:11])
-            L_indj.append(L1_t.index(x))#Si la date du jour est différente de la date précédente, on ajoute son indice dans la liste.
-    L_indj.append(len(L1))#On ajoute le dernier indice de la liste des temps
+            L_indj.append(L1_t.index(x))            #Si la date du jour est différente de la date précédente, on ajoute son indice dans la liste.
+    L_indj.append(len(L1))                          #On ajoute le dernier indice de la liste des temps
     for i in range(len(L_indj)-1):
         i_d=L_indj[i]
         i_f=L_indj[i+1]
-        noise_jour.append(L1[i_d:i_f])#A l'aide de la liste des indices, on sépare la liste L1 suivant les différents jours.
+        noise_jour.append(L1[i_d:i_f])              #A l'aide de la liste des indices, on sépare la liste L1 suivant les différents jours.
     return noise_jour
 
 def moye_bruit(L_bruit, L_date):
@@ -690,7 +690,7 @@ def weekend(L_bruit,L_date):
         else :
             week_end.append(j)
         j=j+1
-    return week_end, semaine 
+    return week_end, semaine
 
 nw=len(weekend(c1_noise,c1_date)[0])
 ns=len(weekend(c1_noise,c1_date)[1])
@@ -704,28 +704,28 @@ for i in range(0,ns,5):
 
 
 def occupation_bu(L1_lum,L1_d):
-    L=[]#Tous les indices lorsque les bureaux sont allumés
+    L=[]                                        #Tous les indices lorsque les bureaux sont allumés
     n=len(L1_lum)
     occ_bureaux=[]
     for i in range(n):
         if L1_lum[i]>=150:
-            L.append(i)#Liste comportant les indices tq la valeur de luminosité soit supérieur au seuil.
+            L.append(i)                         #Liste comportant les indices tq la valeur de luminosité soit supérieur au seuil.
     for x in L:
-        occ_bureaux.append(L1_d[x]) #Liste de toutes les dates où les bureaux sont allumés.   
+        occ_bureaux.append(L1_d[x])             #Liste de toutes les dates où les bureaux sont allumés.
     #Ne récupère que les dates de début et de fin.
-    Lj=[]#Liste prenant les jours d'ouverture des bureaux
+    Lj=[]                                       #Liste prenant les jours d'ouverture des bureaux
     for x in occ_bureaux:
         if int(x[8:10]) not in Lj:
             Lj.append(int(x[8:10]))
 
-    occ_deb_fin=[]#Liste de comportant que deux dates par jour : celle de début et de fin d'ouverture des bureaux.
+    occ_deb_fin=[]                              #Liste de comportant que deux dates par jour : celle de début et de fin d'ouverture des bureaux.
     for x in Lj:
         L_date=[]
         for i in range(len(occ_bureaux)):
             if int(occ_bureaux[i][8:10])==x:
                 L_date.append(occ_bureaux[i])#Récupération dans une liste de toutes les dates d'un même jour (car la luminosité peut baisser au cours de la journée)
-        occ_deb_fin.append(L_date[0][8:])#Récupération de l'heure la plus tôt
-        occ_deb_fin.append(L_date[-1][8:])#Récupération de l'heure la plus tardive
+        occ_deb_fin.append(L_date[0][8:])           #Récupération de l'heure la plus tôt
+        occ_deb_fin.append(L_date[-1][8:])          #Récupération de l'heure la plus tardive
     return(occ_deb_fin)
 
 
@@ -746,4 +746,4 @@ def horaire_semaine(L_lum,L_date,L_noise):
 occ_bur=horaire_semaine(c1_lum,c1_date,c1_noise)
 for i in range(0,len(occ_bur)-1,2):
     print('Les bureaux étaient ouverts de {} à {} le {} août 2019.'.format(occ_bur[i][3:8],occ_bur[i+1][3:8], occ_bur[i][0:2]))
-   
+
