@@ -187,7 +187,6 @@ c6_co2=c6_c[ind_d6:ind_f6+1]
 
 
 
-
 ### Fonctions demandées:
 #Maximum
 def maximum(L1):
