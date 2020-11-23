@@ -297,7 +297,7 @@ def cor(X,Y):
     return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
 
 capt=int(input('Choisissez un capteur entre 1 et 6 '))
-caract_1=int(input("Choisissez une première caractéristiques, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+caract_1=int(input("Choisissez une première caractéristique, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
 caract_2=int(input("Saisissez la deuxième caractéristique dont vous souhaitez connaître l'indice de corrélation tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
 
 cap1=[c1_noise,c1_temp,c1_humidity,c1_lum,c1_co2]
