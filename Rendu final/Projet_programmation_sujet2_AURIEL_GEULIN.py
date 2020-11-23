@@ -9,7 +9,7 @@ from math import exp,sqrt,log
 import matplotlib.pyplot as plt
 
 
-f=open('Données.txt','r')
+f=open('Données_california2.txt','r')
 
 donnees=[]
 colonnes=6
@@ -256,6 +256,13 @@ def humidex(T,h):
     hd=T+0.5555*(6.11*exp(5417.7530*c)-10)
     return hd
 
+#Listes des indices humidex pour chaque capteur
+c1_humidex=[humidex(c1_temp[i],c1_humidity[i]) for i in range (len(c1_temp))]
+c2_humidex=[humidex(c2_temp[i],c2_humidity[i]) for i in range (len(c2_temp))]
+c3_humidex=[humidex(c3_temp[i],c3_humidity[i]) for i in range (len(c3_temp))]
+c4_humidex=[humidex(c4_temp[i],c4_humidity[i]) for i in range (len(c4_temp))]
+c5_humidex=[humidex(c5_temp[i],c5_humidity[i]) for i in range (len(c5_temp))]
+c6_humidex=[humidex(c6_temp[i],c6_humidity[i]) for i in range (len(c6_temp))]
 
 ##Coefficient de corrélation
 #Calcul de la covariance
