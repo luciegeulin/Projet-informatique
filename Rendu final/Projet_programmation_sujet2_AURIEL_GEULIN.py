@@ -9,7 +9,7 @@ from math import exp,sqrt,log
 import matplotlib.pyplot as plt
 
 
-f=open('Données_california2.txt','r')
+f=open('Données.txt','r')
 
 donnees=[]
 colonnes=6
