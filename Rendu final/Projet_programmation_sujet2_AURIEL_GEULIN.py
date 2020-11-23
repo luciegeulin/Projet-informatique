@@ -264,6 +264,22 @@ c4_humidex=[humidex(c4_temp[i],c4_humidity[i]) for i in range (len(c4_temp))]
 c5_humidex=[humidex(c5_temp[i],c5_humidity[i]) for i in range (len(c5_temp))]
 c6_humidex=[humidex(c6_temp[i],c6_humidity[i]) for i in range (len(c6_temp))]
 
+capteurs_humidex=[c1_humidex,c2_humidex,c3_humidex,c4_humidex,c5_humidex,c6_humidex]
+L_ind=[]
+for i in range(len(c1_humidex)):
+    if c1_humidex[i]<29:
+        L_ind.append(i)
+dated_hum=c1_date[L_ind[0]][8:10]
+heured_hum=c1_date[L_ind[0]][11:13]
+minud_hum=c1_date[L_ind[0]][14:16]
+datef_hum=c1_date[L_ind[-1]][8:10]
+heuref_hum=c1_date[L_ind[-1]][11:13]
+minuf_hum=c1_date[L_ind[-1]][14:16]
+print("\nD'après l'indice humidex du capteur 1, le degré de confort est satisfaisant au sein des bureaux entre le {} août {} heure {} et le {} août {} heure {} car l'indice humidex est inférieur à 29.".format(dated_hum,heured_hum,minud_hum,datef_hum,heuref_hum,minuf_hum))
+
+
+
+
 ##Coefficient de corrélation
 #Calcul de la covariance
 def cov(X,Y):
@@ -279,6 +295,22 @@ def cov(X,Y):
 #Calcul du coefficient de corrélation
 def cor(X,Y):
     return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
+
+capt=int(input('Choisissez un capteur entre 1 et 6 '))
+caract_1=int(input("Choisissez une première caractéristiques, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+caract_2=int(input("Saisissez la deuxième caractéristique dont vous souhaitez connaître l'indice de corrélation tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+
+cap1=[c1_noise,c1_temp,c1_humidity,c1_lum,c1_co2]
+cap2=[c2_noise,c2_temp,c2_humidity,c2_lum,c2_co2]
+cap3=[c3_noise,c3_temp,c3_humidity,c3_lum,c3_co2]
+cap4=[c4_noise,c4_temp,c4_humidity,c4_lum,c4_co2]
+cap5=[c5_noise,c5_temp,c5_humidity,c5_lum,c5_co2]
+cap6=[c6_noise,c6_temp,c6_humidity,c6_lum,c6_co2]
+capteurs=[[],cap1,cap2,cap3,cap4,cap5,cap6]
+
+
+print("L'indice de corrélation entre les deux caractéristiques demandées vaut{}".format(cor(capteurs[capt][caract_1],capteurs[capt][caract_2])))
+
 
 ##
 #Courbe maximum
