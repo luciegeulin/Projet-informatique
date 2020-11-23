@@ -118,9 +118,6 @@ fin=my_input_end_date('end_date=aaaa-mm-jj ')
 
 
 
-
-
-
 anneed=int(debut[:4])
 moisd=int(debut[5:7])
 jourd=int(debut[8:])        #Récupération du jour de départ (Seule donnée utile par rapport à la référence car toutes les mesures sont faites au mois d'août 2019)
@@ -192,25 +189,6 @@ c6_co2=c6_c[ind_d6:ind_f6+1]
 
 
 
-def date_convertie(L):
-    n=len(L)
-    Lc=[]
-    for i in range(n):
-        j=int(L[i][8:10])-11                  #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
-        h=int(L[i][11:13])                      #Récupération de l'heure
-        m=int(L[i][14:16])                      #Récupération du nombre de minutes
-        s=int(L[i][17:19])                      #Récupération du nombre de secondes
-        conv=j*24*(60**2)+h*(60**2)+m*60+s      #Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
-        Lc.append(conv)
-    return Lc
-
-temps_c1=date_convertie(c1_date)                #Liste avec les dates de mesures converties en secondes.
-temps_c2=date_convertie(c2_date)
-temps_c3=date_convertie(c3_date)
-temps_c4=date_convertie(c4_date)
-temps_c5=date_convertie(c5_date)
-temps_c6=date_convertie(c6_date)
-
 
 ### Fonctions demandées:
 #Maximum
@@ -269,18 +247,9 @@ def mediane(L):
 a=17.27
 b=237.7
 
-#On a besoin de l'humidité relative pour le calcul de la température de rosée (je suis pas sûre que ça soit utile)
-hum_pourc1=[x/100 for x in c1_humidity]
-hum_pourc2=[x/100 for x in c2_humidity]
-hum_pourc3=[x/100 for x in c3_humidity]
-hum_pourc4=[x/100 for x in c4_humidity]
-hum_pourc5=[x/100 for x in c5_humidity]
-hum_pourc6=[x/100 for x in c6_humidity]
-
 def alpha(T,h):
-    alp=a*T/(b+T)+log(h)
+    alp=a*T/(b+T)+log(h/100)
     return alp
-
 
 def Tros(T,h):
     return b*alpha(T,h)/(a-alpha(T,h))
@@ -290,8 +259,6 @@ def humidex(T,h):
     hd=T+0.5555*(6.11*exp(5417.7530*c)-10)
     return hd
 
-
-#Pour ces trois fonctions, l'humidité doit être comprise entre 0 et 1
 
 ##Coefficient de corrélation
 #Calcul de la covariance
@@ -370,11 +337,28 @@ def courbe_moy(y1):
 
 
 
-
-n=jourf-jourd+1
-
 ## GRAPHIQUES
+def date_convertie(L):
+    n=len(L)
+    Lc=[]
+    for i in range(n):
+        j=int(L[i][8:10])-11                    #Récupération du jour. La référence prise est le 11 août, ce qui exlique le -11.
+        h=int(L[i][11:13])                      #Récupération de l'heure
+        m=int(L[i][14:16])                      #Récupération du nombre de minutes
+        s=int(L[i][17:19])                      #Récupération du nombre de secondes
+        conv=j*24*(60**2)+h*(60**2)+m*60+s      #Date convertie en seconde avec comme référence (0s), pour le 11 août 2019 à 0h00
+        Lc.append(conv)
+    return Lc
 
+temps_c1=date_convertie(c1_date)                #Liste avec les dates de mesures converties en secondes.
+temps_c2=date_convertie(c2_date)
+temps_c3=date_convertie(c3_date)
+temps_c4=date_convertie(c4_date)
+temps_c5=date_convertie(c5_date)
+temps_c6=date_convertie(c6_date)
+
+
+n=jourf-jourd+1                             #Nombre de jours
 
 ### GRAPHIQUE NOISE
 axes = plt.gca()
@@ -541,15 +525,7 @@ axes.set_xlabel("Jours du mois d'août")
 axes.set_ylabel('Luminosité en lux')
 plt.show()
 
-
-
-#Liste des données de chaque capteur avec le titre
-cap1=[['c1_noise']+c1_noise,['c1_temp']+c1_temp,['c1_humidity']+c1_humidity,['c1_lum']+c1_lum,['c1_co2']+c1_co2]
-cap2=[['c2_noise']+c2_noise,['c2_temp']+c2_temp,['c2_humidity']+c2_humidity,['c2_lum']+c2_lum,['c2_co2']+c2_co2]
-cap3=[['c3_noise']+c3_noise,['c3_temp']+c3_temp,['c3_humidity']+c3_humidity,['c3_lum']+c3_lum,['c3_co2']+c3_co2]
-cap4=[['c4_noise']+c4_noise,['c4_temp']+c4_temp,['c4_humidity']+c4_humidity,['c4_lum']+c4_lum,['c4_co2']+c4_co2]
-cap5=[['c5_noise']+c5_noise,['c5_temp']+c5_temp,['c5_humidity']+c5_humidity,['c5_lum']+c5_lum,['c5_co2']+c5_co2]
-cap6=[['c6_noise']+c6_noise,['c6_temp']+c6_temp,['c6_humidity']+c6_humidity,['c6_lum']+c6_lum,['c6_co2']+c6_co2]
+##Similarités
 
 base_temps=[x*60 for x in range(0,20940,60)]
 
@@ -566,7 +542,6 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
     L1_t=date_convertie(l1_t)
     L2_t=date_convertie(l2_t)
     D=[]
-    #D_n=[]#Distance normalisée entre 0 et 1
     n=len(base_temps)
     for i in range(1,n):                                        #Indice parcourant la liste des temps
         l1=[]
@@ -590,8 +565,8 @@ def distance(L1,l1_t,L2,l2_t,base_temps):
 
 caractéristiques=[noise,temperature,humidity,luminosity,co2]
 s_capt_car=[]                               #Liste de liste comportant les distances normalisées des capteurs deux à deux pour chaque caractéristique
+##distances capteurs
 for c in caractéristiques:
-    ##distances capteurs
     D_capteurs=[]
     taille_n=len(c)
     for i in range(taille_n):
