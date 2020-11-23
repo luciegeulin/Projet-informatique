@@ -103,17 +103,23 @@ c6_d=[x[0][:19]for x in c6_d]
 
 
 ##Bonus: Spécifier un intervalle de temps
-def my_input_start_date(prompt,default='2019-08-11'):
+
+print('Appuyez sur "ENTER" pour un intervalle par défaut ou entrez les valeurs souhaitées.')
+
+def my_input_start_date(prompt,default='2019-08-11 '):#Demande de la date de départ
     return input (prompt) or default
-debut=my_input_start_date('start_date=aaaa-mm-jj')
+debut=my_input_start_date('start_date=aaaa-mm-jj ')
 
 
-def my_input_end_date(prompt,default='2019-08-25'):
+
+def my_input_end_date(prompt,default='2019-08-25 '):#Demande de la date de fin
     return input (prompt) or default
+fin=my_input_end_date('end_date=aaaa-mm-jj ')
 
-fin=my_input_end_date('end_date=aaaa-mm-jj')
 
-print(int(debut))
+
+
+
 
 anneed=int(debut[:4])
 moisd=int(debut[5:7])
@@ -634,7 +640,7 @@ for c in caractéristiques:
         similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
 
-print('Similarités')
+print('\nSimilarités')
 #Définition des seuils de similarités.
 seuils=[80,65,70,70,85]
 comparaison_capt=[['1', '2'],[ '1', '3'],['1', '4'],['1','5'],['1', '6'],['2', '3'],['2', '4'],['2', '5'],['2', '6'],['3', '4'],['3', '5'],['3', '5'],['3', '6'],['4', '5'],['5', '6']]
