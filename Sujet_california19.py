@@ -6,11 +6,9 @@ Created on Tue Oct  6 09:11:41 2020
 
 @author: Utilisateur
 """
-from math import log
-from math import exp,sqrt
-import matplotlib.pyplot as plt
-import numpy as np
 
+from math import exp,sqrt,log
+import matplotlib.pyplot as plt
 
 
 f=open('Données_california2.txt','r')
@@ -102,16 +100,20 @@ c6_d=[x[0][:19]for x in c6_d]
 
 
 
-debut='2019-08-11'
-fin='2019-08-25'
+
 
 ##Bonus: Spécifier un intervalle de temps
+def my_input_start_date(prompt,default='2019-08-11'):
+    return input (prompt) or default
+debut=my_input_start_date('start_date=aaaa-mm-jj')
 
 
-# debut=str(input('start_date:aaaa-mm-jj '))        #Demande de la date de départ
-# fin=str(input('end_date:aaaa-mm-jj '))            #Demande de la date de fin
+def my_input_end_date(prompt,default='2019-08-25'):
+    return input (prompt) or default
 
+fin=my_input_end_date('end_date=aaaa-mm-jj')
 
+print(int(debut))
 
 anneed=int(debut[:4])
 moisd=int(debut[5:7])
@@ -285,23 +287,23 @@ def humidex(T,h):
 
 #Pour ces trois fonctions, l'humidité doit être comprise entre 0 et 1
 
-# ##Coefficient de corrélation
-# #Calcul de la covariance
-# def cov(X,Y):
-#     n=len(X)
-#     s=0
-#     mx=moyenne(X)
-#     my=moyenne(Y)
-#     for i in range (n):
-#         s=s+(X[i]-mx)*(Y[i]-my)
-#         cv=(1/n)*s
-#     return cv
+##Coefficient de corrélation
+#Calcul de la covariance
+def cov(X,Y):
+    n=len(X)
+    s=0
+    mx=moyenne(X)
+    my=moyenne(Y)
+    for i in range (n):
+        s=s+(X[i]-mx)*(Y[i]-my)
+        cv=(1/n)*s
+    return cv
 
-# #Calcul du coefficient de corrélation
-# def cor(X,Y):
-#     return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
+#Calcul du coefficient de corrélation
+def cor(X,Y):
+    return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
 
-
+##
 #Courbe maximum
 def courbe_max1(L_t,L):
     ind,m=L_t[L.index(maximum(L))],maximum(L)
