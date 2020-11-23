@@ -101,10 +101,9 @@ c6_d=[x[7].strip().split('\n')for x in c6]
 c6_d=[x[0][:19]for x in c6_d]
 
 
-debut='2019-08-14'
+
+debut='2019-08-11'
 fin='2019-08-25'
-
-
 
 ##Bonus: Spécifier un intervalle de temps
 
@@ -633,7 +632,7 @@ for c in caractéristiques:
         similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
 
-
+print('Similarités')
 #Définition des seuils de similarités.
 seuils=[80,65,70,70,85]
 comparaison_capt=[['1', '2'],[ '1', '3'],['1', '4'],['1','5'],['1', '6'],['2', '3'],['2', '4'],['2', '5'],['2', '6'],['3', '4'],['3', '5'],['3', '5'],['3', '6'],['4', '5'],['5', '6']]
@@ -645,8 +644,6 @@ for i in range(ns):
     for j in range(nc):
         if s_capt_car[i][j]>=seuils[i]:
             print('Les capteurs {} et {} sont similaires vis à vis {}'.format(comparaison_capt[j][0],comparaison_capt[j][1],carac[i]))
-
-
 
 
 
@@ -695,13 +692,15 @@ def weekend(L_bruit,L_date):
 nw=len(weekend(c1_noise,c1_date)[0])
 ns=len(weekend(c1_noise,c1_date)[1])
 
+print ('\nJours de la semaine')
+
 for i in range(0,nw,2):
     print('Le {} et {} août tombent un weekend.'.format(weekend(c1_noise, c1_date)[0][i],weekend(c1_noise, c1_date)[0][i+1]))
 
 for i in range(0,ns,5):
     print('Le {} août tombent en semaine.'.format(weekend(c1_noise, c1_date)[1][i:i+5]))
 
-
+print('\nOuverture des bureaux')
 
 def occupation_bu(L1_lum,L1_d):
     L=[]                                        #Tous les indices lorsque les bureaux sont allumés
