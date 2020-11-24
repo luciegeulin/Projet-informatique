@@ -637,6 +637,7 @@ for c in caractéristiques:
     for x in D_capteurs:
         for i in range(t):
             if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
+
                 x[i]=(x[i]-Lmini[i])/(Lmaxi[i]-Lmini[i])
             else:
                 x[i]=None
@@ -657,7 +658,7 @@ print(s_capt_car)
 
 print('\nSimilarités')
 #Définition des seuils de similarités.
-seuils=[80,65,70,70,85]
+seuils=[20,35,30,30,15]
 comparaison_capt=[['1', '2'],[ '1', '3'],['1', '4'],['1','5'],['1', '6'],['2', '3'],['2', '4'],['2', '5'],['2', '6'],['3', '4'],['3', '5'],['3', '5'],['3', '6'],['4', '5'],['5', '6']]
 carac=['du bruit.','de la température.', "de l'humidité.", 'de la lumière.', "du co2."]
 ns=len(seuils)
@@ -665,7 +666,7 @@ nc=len(comparaison_capt)
 
 for i in range(ns):
     for j in range(nc):
-        if s_capt_car[i][j]>=seuils[i]:
+        if s_capt_car[i][j]<=seuils[i]:
             print('Les capteurs {} et {} sont similaires vis à vis {}'.format(comparaison_capt[j][0],comparaison_capt[j][1],carac[i]))
 
 
