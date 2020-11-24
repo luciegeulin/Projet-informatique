@@ -298,11 +298,6 @@ def cor(X,Y):
 
 
 
-print("Détermination du coefficient de corrélation entre deux caractétistiques d'un capteur")
-capt=int(input('Choisissez un capteur entre 1 et 6 '))
-caract_1=int(input("Choisissez la première caractéristique, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
-caract_2=int(input("Saisissez la deuxième caractéristique, de même, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
-
 cap1=[c1_noise,c1_temp,c1_humidity,c1_lum,c1_co2]
 cap2=[c2_noise,c2_temp,c2_humidity,c2_lum,c2_co2]
 cap3=[c3_noise,c3_temp,c3_humidity,c3_lum,c3_co2]
@@ -311,7 +306,10 @@ cap5=[c5_noise,c5_temp,c5_humidity,c5_lum,c5_co2]
 cap6=[c6_noise,c6_temp,c6_humidity,c6_lum,c6_co2]
 capteurs=[[],cap1,cap2,cap3,cap4,cap5,cap6]
 
-
+print("Détermination du coefficient de corrélation entre deux caractétistiques d'un capteur")
+capt=int(input('Choisissez un capteur entre 1 et 6 '))
+caract_1=int(input("Choisissez la première caractéristique, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+caract_2=int(input("Saisissez la deuxième caractéristique, de même, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
 print("\nL'indice de corrélation entre les deux caractéristiques demandées vaut {}.".format(cor(capteurs[capt][caract_1],capteurs[capt][caract_2])))
 
 
