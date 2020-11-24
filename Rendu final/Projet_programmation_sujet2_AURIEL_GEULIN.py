@@ -653,8 +653,6 @@ for c in caractéristiques:
         similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
 
-print(s_capt_car)
-
 
 print('\nSimilarités')
 #Définition des seuils de similarités.
