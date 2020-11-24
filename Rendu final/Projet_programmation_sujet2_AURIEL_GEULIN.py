@@ -637,7 +637,7 @@ for c in caractéristiques:
     for x in D_capteurs:
         for i in range(t):
             if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
-                x[i]=(Lmaxi[i]-x[i])/(Lmaxi[i]-Lmini[i])
+                x[i]=(x[i]-Lmini[i])/(Lmaxi[i]-Lmini[i])
             else:
                 x[i]=None
 
@@ -651,6 +651,9 @@ for c in caractéristiques:
                 M.append(z[u])
         similaire_p.append((moyenne(M))*100)
     s_capt_car.append(similaire_p)
+
+print(s_capt_car)
+
 
 print('\nSimilarités')
 #Définition des seuils de similarités.
