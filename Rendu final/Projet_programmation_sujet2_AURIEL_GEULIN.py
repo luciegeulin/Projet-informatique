@@ -275,7 +275,7 @@ minud_hum=c1_date[L_ind[0]][14:16]
 datef_hum=c1_date[L_ind[-1]][8:10]
 heuref_hum=c1_date[L_ind[-1]][11:13]
 minuf_hum=c1_date[L_ind[-1]][14:16]
-print("\nD'après l'indice humidex du capteur 1, le degré de confort est satisfaisant au sein des bureaux entre le {} août {} heure {} et le {} août {} heure {} car l'indice humidex est inférieur à 29.".format(dated_hum,heured_hum,minud_hum,datef_hum,heuref_hum,minuf_hum))
+print("\nL'indice humidex du capteur 1 étant supérieur à 29, le degré de confort est considéré comme satisfaisant au sein des bureaux entre le {} août {} heure {} et le {} août {} heure {}.".format(dated_hum,heured_hum,minud_hum,datef_hum,heuref_hum,minuf_hum))
 
 
 
@@ -294,11 +294,14 @@ def cov(X,Y):
 
 #Calcul du coefficient de corrélation
 def cor(X,Y):
-    return cov(X,Y)/(ecart_type(X)*ecart_type(Y))
+    return round(cov(X,Y)/(ecart_type(X)*ecart_type(Y)),3)
 
+
+
+print("Détermination du coefficient de corrélation entre deux caractétistiques d'un capteur")
 capt=int(input('Choisissez un capteur entre 1 et 6 '))
-caract_1=int(input("Choisissez une première caractéristique, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
-caract_2=int(input("Saisissez la deuxième caractéristique dont vous souhaitez connaître l'indice de corrélation tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+caract_1=int(input("Choisissez la première caractéristique, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
+caract_2=int(input("Saisissez la deuxième caractéristique, de même, tapez 0 pour noise, 1 pour temp, 2 pour humidity, 3 pour lum, 4 pour temp,5 pour co2 "))
 
 cap1=[c1_noise,c1_temp,c1_humidity,c1_lum,c1_co2]
 cap2=[c2_noise,c2_temp,c2_humidity,c2_lum,c2_co2]
@@ -309,7 +312,7 @@ cap6=[c6_noise,c6_temp,c6_humidity,c6_lum,c6_co2]
 capteurs=[[],cap1,cap2,cap3,cap4,cap5,cap6]
 
 
-print("L'indice de corrélation entre les deux caractéristiques demandées vaut{}".format(cor(capteurs[capt][caract_1],capteurs[capt][caract_2])))
+print("\nL'indice de corrélation entre les deux caractéristiques demandées vaut {}.".format(cor(capteurs[capt][caract_1],capteurs[capt][caract_2])))
 
 
 ##
