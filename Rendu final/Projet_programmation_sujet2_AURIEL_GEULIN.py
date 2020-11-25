@@ -636,9 +636,9 @@ for c in caractéristiques:
     ##Normalisation
     for x in D_capteurs:
         for i in range(t):
-            if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0 :
-
+            if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0:
                 x[i]=(x[i]-Lmini[i])/(Lmaxi[i]-Lmini[i])
+                
             else:
                 x[i]=None
 
