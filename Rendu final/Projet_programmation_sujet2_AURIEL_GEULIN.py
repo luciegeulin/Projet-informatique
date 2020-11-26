@@ -739,7 +739,6 @@ def occupation_bu(L1_lum,L1_d):
     for x in occ_bureaux:
         if int(x[8:10]) not in Lj:
             Lj.append(int(x[8:10]))
-
     occ_deb_fin=[]                              #Liste de comportant que deux dates par jour : celle de début et de fin d'ouverture des bureaux.
     for x in Lj:
         L_date=[]
