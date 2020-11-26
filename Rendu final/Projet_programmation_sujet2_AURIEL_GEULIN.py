@@ -188,7 +188,7 @@ c6_co2=c6_c[ind_d6:ind_f6+1]
 
 
 ### Fonctions demandées:
-#Maximum
+#Maximum, de complexité linéaire (n-1 comparaisons)
 def maximum(L1):
     maxi=L1[0]
     for elm in L1:
@@ -196,7 +196,7 @@ def maximum(L1):
             maxi=elm
     return maxi
 
-#Minimum
+#Minimum de complexité linéaire (n-1 comparaisons)
 def minimum(L1):
     mini=L1[0]
     for elm in L1:
@@ -204,25 +204,25 @@ def minimum(L1):
             mini=elm
     return mini
 
-#Moyenne
+#Moyenne de complexité linéaire (n-1 actions)
 def moyenne(L1):
     moy=0
     for elm in L1:
         moy+=elm
     return moy/len(L1)
 
-#Variance
+#Variance, de comlexité en O(n)
 def variance(L1):
     moy=moyenne(L1)
     var=[(x-moy)**2 for x in L1]
     return moyenne(var)
 
-#Ecart type
+#Ecart type de complexité en O(n)
 def ecart_type(L1):
     return (sqrt(variance(L1)))
 
 #Médiane
-#Organiser la série:
+#Organiser la série : complexité en O(n²)
 def insertionSort(L):
     for i in range(1,len(L)):
         elm=L[i]
@@ -233,6 +233,7 @@ def insertionSort(L):
             L[j+1]=elm
     return L
 
+#Mediane : complexité en O(nlog(n))
 def mediane(L):
     Lt=insertionSort(L)
     taille=len(insertionSort(Lt))+1
@@ -638,7 +639,7 @@ for c in caractéristiques:
         for i in range(t):
             if type(x[i])==float and (Lmaxi[i]-Lmini[i])!=0:
                 x[i]=(x[i]-Lmini[i])/(Lmaxi[i]-Lmini[i])
-                
+
             else:
                 x[i]=None
 
